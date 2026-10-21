@@ -38,6 +38,7 @@ drop policy if exists "memories read"    on public.memories;
 drop policy if exists "memories write"   on public.memories;
 drop policy if exists "responses read"   on public.responses;
 drop policy if exists "responses insert" on public.responses;
+drop policy if exists "responses delete" on public.responses;
 
 create policy "config read"      on public.config    for select using (true);
 create policy "config write"     on public.config    for all    using (true) with check (true);
@@ -45,11 +46,19 @@ create policy "memories read"    on public.memories  for select using (true);
 create policy "memories write"   on public.memories  for all    using (true) with check (true);
 create policy "responses read"   on public.responses for select using (true);
 create policy "responses insert" on public.responses for insert with check (true);
+create policy "responses delete" on public.responses for delete using (true);
 
 -- 4) Realtime (để câu trả lời / ảnh hiện ngay, không cần tải lại)
-alter publication supabase_realtime add table public.config;
-alter publication supabase_realtime add table public.memories;
-alter publication supabase_realtime add table public.responses;
+do $$
+declare t text;
+begin
+  foreach t in array array['config','memories','responses'] loop
+    if not exists (select 1 from pg_publication_tables
+                   where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = t) then
+      execute format('alter publication supabase_realtime add table public.%I', t);
+    end if;
+  end loop;
+end $$;
 
 -- 5) Storage: policy cho bucket ảnh tên "cards"
 --    TRƯỚC khi chạy phần này: vào Storage > New bucket, đặt tên "cards",

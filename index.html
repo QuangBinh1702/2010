@@ -1,4 +1,4 @@
-<title>Gửi Pé Pookie</title>
+<title>Gửi em iu</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -55,6 +55,7 @@ button{cursor:pointer}
 main{position:relative;z-index:2;max-width:1100px;margin:0 auto;min-height:calc(100vh - 140px);display:grid;place-items:center;padding-block:10px 40px}
 .screen{width:100%;display:grid;place-items:center;animation:enter .7s cubic-bezier(.2,.8,.2,1)}
 @keyframes enter{from{transform:translateY(22px) scale(.98)}}
+.screen.still{animation:none}
 .card{position:relative;width:min(460px,100%);background:var(--card);border:1px solid var(--line);border-radius:28px;padding:64px 28px 28px;box-shadow:var(--shadow);text-align:center;backdrop-filter:blur(10px)}
 .card.wide{width:min(720px,100%)}
 .garland{position:absolute;left:50%;top:-38px;transform:translateX(-50%);width:min(300px,86%);height:auto;pointer-events:none}
@@ -96,7 +97,7 @@ h2{font-size:clamp(26px,5.5vw,34px)}
 
 /* activities */
 .acts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:22px;text-align:left}
-.act{position:relative;border:1.5px solid var(--line);border-radius:18px;padding:14px 14px 12px;background:var(--card);display:grid;gap:2px;transition:border-color .2s,transform .2s,background .2s}
+.act{position:relative;border:1.5px solid var(--line);border-radius:18px;padding:14px 14px 12px;background:var(--card);display:grid;gap:2px;text-align:left;transition:border-color .2s,transform .2s,background .2s}
 .act:hover{transform:translateY(-2px)}
 .act .em{font-size:26px;line-height:1}
 .act b{font-size:15px}
@@ -119,15 +120,27 @@ h2{font-size:clamp(26px,5.5vw,34px)}
 .cal button[disabled]{opacity:.3;cursor:default}
 .cal button.today{outline:1.5px dashed var(--accent)}
 .cal button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);font-weight:700}
-.times{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;align-content:start}
-.times h4,.cal-wrap h4{grid-column:1/-1;margin:0 0 4px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.times button{border:1.5px solid var(--line);background:var(--card);border-radius:12px;padding:9px 0;font-weight:600;font-variant-numeric:tabular-nums}
-.times button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
-.times .custom{grid-column:1/-1;display:flex;align-items:center;gap:10px;border:1.5px dashed var(--line);background:var(--card);border-radius:12px;padding:6px 6px 6px 14px;font-weight:600;font-size:14px;color:var(--muted);cursor:pointer}
-.times .custom input{flex:1;min-width:0;border:0;background:transparent;font:inherit;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;padding:4px 6px;outline:none;color-scheme:light dark}
-.times .custom.on{border-style:solid;border-color:var(--accent);background:var(--accent)}
-.times .custom.on span,.times .custom.on input{color:var(--accent-ink)}
-.times .custom.on input::-webkit-calendar-picker-indicator{filter:invert(1)}
+.times{display:grid;gap:10px;align-content:start}
+.times h4,.cal-wrap h4{margin:0 0 4px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+/* ô hiển thị giờ đã chọn + nút chỉnh ±5 phút */
+.tdisp{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:8px;padding:10px;border:1.5px dashed var(--line);border-radius:18px;background:var(--card);text-align:center;transition:background .2s,border-color .2s}
+.tdisp.on{border-style:solid;border-color:var(--accent);background:var(--soft)}
+.tdisp b{display:block;font-size:30px;font-weight:700;line-height:1.15;letter-spacing:.02em;font-variant-numeric:tabular-nums;color:var(--ink)}
+.tdisp:not(.on) b{color:var(--muted);opacity:.55}
+.tdisp small{display:block;font-size:12.5px;color:var(--muted);margin-top:2px}
+.tdisp .iconbtn{width:42px;height:42px;font-size:20px;line-height:1;color:var(--accent)}
+.tdisp .iconbtn:disabled{opacity:.3;cursor:default}
+/* tab buổi trong ngày */
+.ttabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;padding:4px;border-radius:14px;background:var(--soft)}
+.ttabs button{border:0;background:none;border-radius:10px;padding:8px 0;font-weight:600;font-size:13.5px;color:var(--muted);transition:background .2s,color .2s}
+.ttabs button[aria-selected="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 6px #0000001a}
+/* lưới giờ cách 30 phút */
+.tslots{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:44px;gap:8px;align-content:start;min-height:148px} /* luôn cao 3 hàng: đổi buổi không làm trang nhảy */
+.tslots button{border:1.5px solid var(--line);background:var(--card);border-radius:12px;padding:10px 0;font-weight:600;font-size:14px;font-variant-numeric:tabular-nums}
+.tslots button:hover:not(:disabled){border-color:var(--accent)}
+.tslots button:disabled{opacity:.35;text-decoration:line-through;cursor:default}
+.ttabs button:disabled{opacity:.4;cursor:default}
+.tslots button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 
 /* ticket */
 .ticket{margin-top:22px;text-align:left;border-radius:20px;background:var(--soft);position:relative;overflow:hidden}
@@ -175,14 +188,28 @@ textarea.note:focus{border-color:var(--accent)}
 .thumbs button{position:absolute;top:4px;right:4px;width:24px;height:24px;border-radius:50%;border:0;background:#000a;color:#fff;padding:0;font-size:14px;line-height:1}
 .thumbs .st{position:absolute;inset:auto 0 0;background:#000a;color:#fff;font-size:10px;text-align:center;padding:2px}
 .uprow{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.resp{display:grid;gap:8px}
-.resp div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:13px}
-.resp b{display:block}
+.bell{position:relative}
+.badge{position:absolute;top:-5px;right:-5px;min-width:19px;height:19px;padding:0 5px;border-radius:99px;background:var(--accent);color:var(--accent-ink);font-size:11px;font-weight:700;line-height:1;display:grid;place-items:center;border:2px solid var(--bg1)}
+.noti{display:grid;gap:10px}
+.noti .item{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:start;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px}
+.noti .item.new{border-color:var(--accent);box-shadow:inset 4px 0 0 var(--accent)}
+.noti .ic{width:40px;height:40px;border-radius:50%;background:var(--soft);display:grid;place-items:center;font-size:19px}
+.noti b{display:block;font-size:14.5px}
+.noti .tag{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:99px;background:var(--accent);color:var(--accent-ink);font-size:10.5px;font-weight:700;vertical-align:2px}
+.noti .what{font-size:13.5px;margin-top:3px}
+.noti .q{font-size:13.5px;font-style:italic;margin-top:8px;padding:8px 10px;border-radius:10px;background:var(--soft);overflow-wrap:anywhere}
+.noti small{display:block;font-size:11.5px;color:var(--muted);margin-top:8px}
+.noti .del{border:0;background:var(--soft);color:var(--muted);height:32px;min-width:32px;padding:0 10px;border-radius:99px;font-size:17px;line-height:1}
+.noti .del.arm{background:var(--accent);color:var(--accent-ink);font-size:12px;font-weight:700}
+.noti .none{text-align:center;color:var(--muted);font-size:13.5px;padding:28px 8px}
 .sheet-foot{display:flex;justify-content:flex-end;gap:10px;margin-top:18px;position:sticky;bottom:-24px;background:var(--bg1);padding-block:12px}
 .confirm-del{display:flex;gap:6px;align-items:center;font-size:12px}
 
-.viewer{position:fixed;inset:0;z-index:60;background:#000d;display:grid;place-items:center;padding:24px}
-.viewer img{max-width:100%;max-height:100%;object-fit:contain;border-radius:6px}
+.viewer{position:fixed;inset:0;z-index:60;background:#000e;display:grid;place-items:center;padding:max(16px,env(safe-area-inset-top,0px)) 16px max(16px,env(safe-area-inset-bottom,0px));cursor:zoom-out;animation:fade .2s}
+@keyframes fade{from{opacity:0}}
+/* giới hạn theo khung nhìn: max-height:100% không có tác dụng vì ô grid không có chiều cao cố định */
+.viewer img{display:block;width:auto;height:auto;max-width:min(100%,1100px);max-height:calc(100vh - 48px);max-height:calc(100dvh - 48px);object-fit:contain;border-radius:6px;box-shadow:0 30px 60px -20px #000}
+.viewer .x{position:fixed;top:max(14px,env(safe-area-inset-top,0px));right:14px;width:44px;height:44px;border-radius:50%;border:0;background:#ffffff26;color:#fff;font-size:26px;line-height:1;display:grid;place-items:center;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:70;background:var(--ink);color:var(--bg1);padding:11px 18px;border-radius:14px;font-weight:600;font-size:14px;max-width:calc(100vw - 32px);text-align:center}
 .burst{position:fixed;pointer-events:none;z-index:40;font-size:22px;animation:fly 1.4s cubic-bezier(.15,.7,.3,1) forwards}
@@ -194,10 +221,28 @@ textarea.note:focus{border-color:var(--accent)}
   .when{grid-template-columns:1fr}
   .top .today{display:none}
   .top{margin-inline:-16px;padding-inline:16px;padding-block:10px;background:color-mix(in srgb,var(--bg1) 82%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  /* svh: không tính thanh địa chỉ của trình duyệt điện thoại; chừa chỗ phía trên cho vòng hoa */
+  main{min-height:calc(100vh - 120px);min-height:calc(100svh - 120px);padding-block:48px 32px}
+  .intro .polaroid{margin-top:0}
+  .foot{flex-direction:column;align-items:stretch;text-align:center;gap:10px}
+  .foot .btn{width:100%}
+  /* bảng Soạn thiệp / Thông báo trượt lên từ dưới, kiểu app điện thoại */
+  .overlay{place-items:end center;padding:max(28px,env(safe-area-inset-top,0px)) 0 0}
+  .sheet{width:100%;max-height:100%;border-radius:24px 24px 0 0;padding:22px 18px 0}
+  .sheet-foot{bottom:0;margin-inline:-18px;padding:12px 18px calc(12px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line)}
+  .sheet-foot .btn{flex:1}
 }
 @media (max-width:420px){
-  .acts{grid-template-columns:1fr} .card{padding:56px 18px 22px}
+  .card{padding:56px 18px 22px}
   .back{z-index:3;top:10px;right:10px;padding:4px 10px;border-radius:99px;background:var(--card);box-shadow:0 2px 8px #0001}
+  /* chỗ đi chơi: dạng hàng gọn (biểu tượng trái, chữ phải) thay vì thẻ cao */
+  .acts{grid-template-columns:1fr;gap:8px;margin-top:18px}
+  .act{grid-template-columns:auto minmax(0,1fr);column-gap:12px;row-gap:1px;align-items:center;padding:12px 46px 12px 14px;border-radius:16px}
+  .act .em{grid-row:1/3;font-size:24px}
+  .act .ck{top:50%;right:14px;translate:0 -50%}
+  .act.other{padding-right:14px}
+  .act.other input{grid-column:1/-1;margin-top:6px}
+  .album{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media (prefers-reduced-motion:reduce){ *,*::before,*::after{animation:none!important;transition:none!important} }
 </style>
@@ -210,6 +255,7 @@ textarea.note:focus{border-color:var(--accent)}
   <div class="sp"></div>
   <span class="today" id="todayText"></span>
   <button class="iconbtn" id="themeBtn" aria-label="Đổi giao diện" aria-expanded="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r="1.5"/><circle cx="17.5" cy="10.5" r="1.5"/><circle cx="8.5" cy="7.5" r="1.5"/><circle cx="6.5" cy="12.5" r="1.5"/><path d="M12 2a10 10 0 0 0 0 20c1.1 0 2-.9 2-2 0-.5-.2-1-.5-1.3-.3-.4-.5-.8-.5-1.3 0-1.1.9-2 2-2h2.4A5.6 5.6 0 0 0 22 9.8C22 5.5 17.5 2 12 2z"/></svg></button>
+  <button class="iconbtn bell" id="notiBtn" aria-label="Thông báo" hidden><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span class="badge" id="notiBadge" hidden></span></button>
   <button class="iconbtn" id="setBtn" aria-label="Soạn thiệp" hidden><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h4L19 9l-4-4L4 16v4z"/></svg></button>
   <div class="themes" id="themes" role="menu" hidden></div>
 </header>
@@ -245,17 +291,21 @@ textarea.note:focus{border-color:var(--accent)}
       <input type="file" id="albumIn" accept="image/png,image/jpeg,image/webp,image/gif" multiple hidden>
       <div class="thumbs" id="albumThumbs"></div>
     </div>
-    <div class="sec">
-      <h4>Câu trả lời đã nhận</h4>
-      <div class="resp" id="respList"></div>
-    </div>
     <div class="sheet-foot">
       <button class="btn ghost" id="setPreview" type="button">Xem thử từ đầu</button>
       <button class="btn" id="setSave" type="button">Lưu thiệp</button>
     </div>
   </div>
 </div>
-<div class="viewer" id="viewer" hidden><img id="viewerImg" alt=""></div>
+<div class="overlay" id="notiOverlay" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="notiTitle">
+    <h3 id="notiTitle">Thông báo</h3>
+    <p class="sub">Lịch hẹn em gửi về. Xoá thông báo là xoá luôn trên Supabase.</p>
+    <div class="noti" id="respList"></div>
+    <div class="sheet-foot"><button class="btn ghost" id="notiClose" type="button">Đóng</button></div>
+  </div>
+</div>
+<div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-label="Xem ảnh" hidden><img id="viewerImg" alt=""><button class="x" type="button" aria-label="Đóng ảnh">×</button></div>
 <div class="toast" id="toast" role="status" hidden></div>
 
 <script>
@@ -281,7 +331,19 @@ const DEFAULTS = {
   photo:null, photoMe:null, theme:null,
 };
 const NO_TEXTS = ['Không','Đừng mà…','Chắc chưa?','Nghĩ lại đi 🥺','Bấm nhầm đó','Không có nút này đâu','Mèo buồn rồi kìa','Thôi bấm Có đi mà'];
-const TIMES = ['08:00','10:00','14:00','16:00','17:30','18:30','19:00','20:00','21:00'];
+// Các buổi trong bước chọn giờ: mỗi buổi hiện các mốc cách 30 phút từ `from` đến `to`.
+const PERIODS = [
+  { id:'sang',  name:'Sáng',  label:'🌤️ Buổi sáng',  from:'07:00', to:'10:30' },
+  { id:'trua',  name:'Trưa',  label:'☀️ Buổi trưa',  from:'11:00', to:'13:30' },
+  { id:'chieu', name:'Chiều', label:'🌇 Buổi chiều', from:'14:00', to:'17:30' },
+  { id:'toi',   name:'Tối',   label:'🌙 Buổi tối',   from:'18:00', to:'22:30' },
+];
+const toMin = t => { const [h,m] = t.split(':').map(Number); return h*60 + m; };
+const fromMin = m => `${pad(Math.floor(m/60))}:${pad(m%60)}`;
+const periodOf = t => { if (!t) return null; const m = toMin(t); return m < 5*60 ? 'toi' : m < 11*60 ? 'sang' : m < 14*60 ? 'trua' : m < 18*60 ? 'chieu' : 'toi'; };
+const nowMin = () => { const d = new Date(); return d.getHours()*60 + d.getMinutes(); };
+// Ngày + giờ hẹn đã qua so với lúc này chưa.
+const isPastPick = (date, t) => { if (!date || !t) return false; const at = new Date(date); at.setHours(0, toMin(t), 0, 0); return at <= new Date(); };
 const DOW = ['T2','T3','T4','T5','T6','T7','CN'];
 
 const S = { cfg:{...DEFAULTS}, memories:[], responses:[], step:0, noCount:0,
@@ -409,11 +471,16 @@ function cardShell(opts={}){
 }
 
 function render(){
-  const stage=$('#stage'); stage.replaceChildren();
+  // Vẽ lại trong cùng một bước (chọn ngày, giờ, đổi theme…) thì không chạy lại hiệu ứng vào màn
+  // và giữ nguyên vị trí cuộn, nếu không màn hình sẽ giật lên mỗi lần bấm.
+  const same=S.shownStep===S.step, y=scrollY; S.shownStep=S.step;
+  const stage=$('#stage'); if (same) stage.style.minHeight=stage.offsetHeight+'px';
+  stage.replaceChildren();
   $('#fromText').textContent=`Gửi ${S.cfg.recipient} của anh 💗`;
   const noFlee=$('#noBtn'); if (noFlee) noFlee.remove();
   if (S.step!==1) $('#cats').replaceChildren();
   [renderIntro,renderAsk,renderYes,renderWhere,renderWhen,renderTicket,renderDone][S.step]();
+  if (same){ stage.firstElementChild?.classList.add('still'); stage.style.minHeight=''; scrollTo(0,y); }
 }
 
 function renderIntro(){
@@ -495,20 +562,41 @@ function renderWhen(){
   const offset=(m.getDay()+6)%7; for(let i=0;i<offset;i++) cal.append(el('span'));
   const days=new Date(m.getFullYear(),m.getMonth()+1,0).getDate();
   for(let d=1; d<=days; d++){ const dt=new Date(m.getFullYear(),m.getMonth(),d); const b=el('button',null,String(d)); b.type='button';
-    if (dt<today) b.disabled=true; if (+dt===+today) b.classList.add('today');
+    if (dt<today || (+dt===+today && nowMin()>=1435)) b.disabled=true; if (+dt===+today) b.classList.add('today');
     b.setAttribute('aria-pressed',String(S.pick.date && +S.pick.date===+dt)); b.setAttribute('aria-label',longDate(dt));
-    b.onclick=()=>{ S.pick.date=dt; render(); }; cal.append(b); }
+    b.onclick=()=>{ S.pick.date=dt;
+      if (isPastPick(dt,S.pick.time)){ S.pick.time=null; toast('Giờ đó hôm nay qua rồi, em chọn giờ khác nha'); }
+      render(); }; cal.append(b); }
   cw.append(el('h4',null,'Ngày'), head, cal);
   const times=el('div','times'); times.append(el('h4',null,'Giờ'));
-  TIMES.forEach(t=>{ const b=el('button',null,t); b.type='button'; b.setAttribute('aria-pressed',String(S.pick.time===t)); b.onclick=()=>{ S.pick.time=t; render(); }; times.append(b); });
-  const own=!!S.pick.time && !TIMES.includes(S.pick.time);
-  const cl=el('label','custom'); cl.classList.toggle('on',own); cl.append(el('span',null,'Giờ khác'));
-  const ti=el('input'); ti.type='time'; ti.step=300; ti.value=own?S.pick.time:''; ti.setAttribute('aria-label','Chọn giờ khác');
-  ti.onchange=()=>{ if (ti.value){ S.pick.time=ti.value; render(); } };
-  cl.append(ti); times.append(cl);
+  const cur=S.pick.time, past=t=>isPastPick(S.pick.date,t);
+  const slotsOf=p=>{ const a=[]; for (let m=toMin(p.from); m<=toMin(p.to); m+=30) a.push(fromMin(m)); return a; };
+  const isOpen=p=>slotsOf(p).some(v=>!past(v));
+  // Buổi đang mở mà đã qua hết giờ (vd. chọn hôm nay lúc tối) thì nhảy sang buổi gần nhất còn giờ.
+  let tab=S.timeTab||periodOf(cur)||'toi';
+  if (!isOpen(PERIODS.find(p=>p.id===tab))) tab=(PERIODS.find(isOpen)||PERIODS.at(-1)).id;
+  const setTime=t=>{ S.pick.time=t; S.timeTab=periodOf(t); render(); };
+  const disp=el('div','tdisp'+(cur?' on':''));
+  const minus=el('button','iconbtn','−'), plus=el('button','iconbtn','+');
+  minus.type=plus.type='button';
+  minus.disabled=!cur || toMin(cur)<5 || past(fromMin(toMin(cur)-5));
+  plus.disabled=!cur || toMin(cur)>=1435;
+  minus.setAttribute('aria-label','Sớm hơn 5 phút'); plus.setAttribute('aria-label','Muộn hơn 5 phút');
+  minus.onclick=()=>setTime(fromMin(toMin(cur)-5)); plus.onclick=()=>setTime(fromMin(toMin(cur)+5));
+  const mid=el('div'); mid.append(el('b',null,cur||'--:--'), el('small',null,cur?PERIODS.find(p=>p.id===periodOf(cur)).label:'Chọn một giờ bên dưới nha'));
+  mid.setAttribute('aria-live','polite'); disp.append(minus,mid,plus);
+  const tabs=el('div','ttabs'); tabs.setAttribute('role','tablist');
+  PERIODS.forEach(p=>{ const b=el('button',null,p.name); b.type='button'; b.setAttribute('role','tab'); b.setAttribute('aria-selected',String(p.id===tab));
+    b.disabled=!isOpen(p); if (b.disabled) b.title='Buổi này qua rồi';
+    b.onclick=()=>{ S.timeTab=p.id; render(); }; tabs.append(b); });
+  const slots=el('div','tslots');
+  slotsOf(PERIODS.find(p=>p.id===tab)).forEach(v=>{ const b=el('button',null,v); b.type='button'; b.disabled=past(v);
+    b.setAttribute('aria-pressed',String(cur===v)); b.onclick=()=>setTime(v); slots.append(b); });
+  times.append(disp,tabs,slots);
   wrap.append(cw,times);
   const foot=el('div','foot'); const info=el('small', null, S.pick.date ? `${longDate(S.pick.date)}${S.pick.time?' · '+S.pick.time:''}` : 'Chưa chọn ngày');
-  const next=el('button','btn','Xem vé hẹn →'); next.disabled=!(S.pick.date&&S.pick.time); next.onclick=()=>go(5);
+  const next=el('button','btn','Xem vé hẹn →'); next.disabled=!(S.pick.date&&S.pick.time) || past(S.pick.time);
+  next.onclick=()=>{ if (isPastPick(S.pick.date,S.pick.time)){ S.pick.time=null; toast('Giờ đó qua mất rồi, em chọn lại giờ nha'); render(); return; } go(5); };
   foot.append(info,next); card.append(wrap,foot,stepDots(4)); $('#stage').append(scr);
 }
 
@@ -526,11 +614,13 @@ function renderTicket(){
   t.append(tt, el('div','rip'), dl);
   const note=el('textarea','note'); note.id='noteIn'; note.placeholder='Em muốn dặn anh gì không? (mặc đồ đôi, nhớ mang ô…)'; note.maxLength=300; note.value=S.pick.note; note.oninput=()=>S.pick.note=note.value;
   const send=el('button','btn','Gửi cho anh ✉'); send.style.marginTop='16px';
-  send.onclick=async()=>{ send.disabled=true; send.textContent='Đang gửi…';
+  send.onclick=async()=>{
+    if (isPastPick(S.pick.date,S.pick.time)){ S.pick.time=null; toast('Giờ hẹn qua mất rồi, em chọn lại giờ nha'); go(4); return; }
+    send.disabled=true; send.textContent='Đang gửi…';
     const doc={ acts, date:S.pick.date?fmtDate(S.pick.date):'', time:S.pick.time||'', note:S.pick.note.trim(), at:Date.now() };
     let saved=false;
     if (S.db){ try { await S.db.collection('responses').doc().set(doc); saved=true; } catch {} }
-    else { S.responses.unshift(doc); saved=true; }
+    else { S.responses.unshift({id:'l'+Date.now(),...doc}); updateBadge(); saved=true; }
     S.sent=saved; const r=send.getBoundingClientRect(); burst(r.left+r.width/2,r.top,40); go(6); };
   card.append(t,note,send,stepDots(5)); $('#stage').append(scr);
 }
@@ -547,14 +637,19 @@ function renderDone(){
     const al=el('div','album');
     S.memories.forEach((m,i)=>{ const f=el('figure'); f.style.setProperty('--r',((i%2?1:-1)*(1.5+(i*7%3)))+'deg'); const img=new Image(); img.loading='lazy'; img.alt=m.caption||''; img.src=imgSrc(m.asset);
       img.onerror=()=>f.remove(); f.append(img); if (m.caption) f.append(el('figcaption',null,m.caption));
-      f.onclick=()=>{ $('#viewerImg').src=img.src; $('#viewer').hidden=false; }; al.append(f); });
+      f.onclick=()=>openViewer(img.src, img.alt); al.append(f); });
     card.append(al);
   }
   const again=el('button','btn ghost','Xem lại từ đầu'); again.style.marginTop='22px';
   again.onclick=()=>{ S.noCount=0; S.pick={acts:new Set(),other:'',date:null,time:null,note:''}; go(0); };
   card.append(again); $('#stage').append(scr);
 }
-$('#viewer').onclick=()=>$('#viewer').hidden=true;
+function openViewer(src, alt){
+  const v=$('#viewerImg'); v.removeAttribute('src'); v.src=src; v.alt=alt||''; // bỏ ảnh cũ trước để không thấy nó thoáng qua
+  $('#viewer').hidden=false; document.body.style.overflow='hidden'; $('#viewer .x').focus();
+}
+function closeViewer(){ if ($('#viewer').hidden) return; $('#viewer').hidden=true; document.body.style.overflow=''; }
+$('#viewer').onclick=closeViewer;
 
 /* ---------- editor ---------- */
 const ERR={too_large:'Ảnh quá 20MB',unsupported_type:'Sai định dạng',quota_or_state:'Hết dung lượng',rate_limited:'Thử lại sau'};
@@ -581,7 +676,7 @@ function fillEditor(){
   $('#fQuestion').value=S.cfg.question; $('#fLove').value=S.cfg.love; $('#fActs').value=S.cfg.acts;
   $('#mainPhotoState').textContent=S.cfg.photo?'Đã có ảnh. Chọn ảnh khác để thay.':'Chưa có ảnh';
   $('#mePhotoState').textContent=S.cfg.photoMe?'Đã có ảnh. Chọn ảnh khác để thay.':'Chưa có ảnh';
-  renderThumbs(); renderResp(); showMeter();
+  renderThumbs(); showMeter();
 }
 function renderThumbs(){
   const box=$('#albumThumbs'); box.replaceChildren();
@@ -594,19 +689,48 @@ async function delMemory(m){
   try { if (S.mode==='cloud'){ await S.db.doc('memories/'+m.id).delete(); try { await S.assets.delete(m.asset); } catch {} }
     else { S.memories=S.memories.filter(x=>x!==m); renderThumbs(); } toast('Đã xoá ảnh'); } catch { toast('Chưa xoá được ảnh.'); }
 }
+/* ---------- thông báo (câu trả lời em gửi) ---------- */
+const seenAt = () => +(store.get('pk.seen')||0);
+function updateBadge(){
+  const n=S.responses.filter(r=>(r.at||0)>seenAt()).length, b=$('#notiBadge');
+  b.hidden=!n; b.textContent=n>9?'9+':String(n);
+  $('#notiBtn').setAttribute('aria-label', n?`Thông báo (${n} mới)`:'Thông báo');
+}
+function respDate(s){ const p=(s||'').split('/').map(Number); return p.length===3 && p[2] ? longDate(new Date(p[2],p[1]-1,p[0])) : (s||'Chưa chọn ngày'); }
 function renderResp(){
   const box=$('#respList'); box.replaceChildren();
-  if (!S.responses.length){ box.append(el('small',null,'Chưa có ai trả lời. Khi em gửi lịch hẹn, câu trả lời hiện ở đây.')); box.lastChild.style.color='var(--muted)'; return; }
-  S.responses.forEach(r=>{ const d=el('div'); d.append(el('b',null,`${r.date||'?'} · ${r.time||'?'}`), el('span',null,(r.acts||[]).join(', ')));
-    if (r.note) d.append(el('div',null,'“'+r.note+'”')); const at=el('div',null,'Gửi lúc '+new Date(r.at).toLocaleString('vi-VN')); at.style.cssText='font-size:11px;color:var(--muted);margin-top:4px'; d.append(at); box.append(d); });
+  if (!S.responses.length){ box.append(el('div','none','Chưa có thông báo nào.\nKhi em gửi lịch hẹn, thông báo sẽ hiện ở đây 💌')); box.lastChild.style.whiteSpace='pre-line'; return; }
+  const seen=seenAt();
+  S.responses.forEach(r=>{
+    const isNew=(r.at||0)>seen, it=el('div','item'+(isNew?' new':''));
+    const body=el('div'); const t=el('b',null,`${respDate(r.date)} · ${r.time||'?'}`); if (isNew) t.append(el('span','tag','Mới'));
+    body.append(t, el('div','what',(r.acts||[]).join(' · ')||'Chưa chọn chỗ đi'));
+    if (r.note) body.append(el('div','q','“'+r.note+'”'));
+    body.append(el('small',null,'Em gửi lúc '+new Date(r.at).toLocaleString('vi-VN')));
+    const x=el('button','del','×'); x.type='button'; x.setAttribute('aria-label','Xoá thông báo');
+    x.onclick=()=>{ if (x.classList.contains('arm')) return delResp(r, x);
+      x.classList.add('arm'); x.textContent='Xoá?'; setTimeout(()=>{ if (x.isConnected && !x.disabled){ x.classList.remove('arm'); x.textContent='×'; } },3000); };
+    it.append(el('div','ic','💌'), body, x); box.append(it);
+  });
 }
+async function delResp(r, btn){
+  btn.disabled=true;
+  try { if (S.mode==='cloud') await S.db.doc('responses/'+r.id).delete();
+    S.responses=S.responses.filter(x=>x!==r); renderResp(); updateBadge(); toast('Đã xoá thông báo'); }
+  catch { btn.disabled=false; toast('Chưa xoá được. Đã chạy lại supabase-setup.sql chưa?'); }
+}
+function openNoti(){ renderResp(); $('#notiOverlay').hidden=false;
+  const last=Math.max(0,...S.responses.map(r=>r.at||0)); if (last>seenAt()) store.set('pk.seen',String(last)); updateBadge(); }
+$('#notiBtn').onclick=openNoti;
+$('#notiClose').onclick=()=>$('#notiOverlay').hidden=true;
+$('#notiOverlay').addEventListener('click',e=>{ if(e.target.id==='notiOverlay') $('#notiOverlay').hidden=true; });
 async function showMeter(){
   const m=$('#meter'); if (S.mode!=='cloud'){ m.textContent=S.mode==='local'?'Bản xem thử: ảnh chỉ giữ trong tab này.':''; return; }
   try { const {usage}=await S.assets.list(); const mb=b=>(b/1048576).toFixed(1)+' MB'; m.textContent=`Đã dùng ${mb(usage.bytes)} / ${mb(usage.maxBytes)}`; } catch { m.textContent=''; }
 }
 $('#setBtn').onclick=()=>{ fillEditor(); $('#setOverlay').hidden=false; };
 $('#setOverlay').addEventListener('click',e=>{ if(e.target.id==='setOverlay') $('#setOverlay').hidden=true; });
-document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ $('#setOverlay').hidden=true; $('#viewer').hidden=true; $('#themes').hidden=true; } });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ $('#setOverlay').hidden=true; $('#notiOverlay').hidden=true; closeViewer(); $('#themes').hidden=true; } });
 function readForm(){ Object.assign(S.cfg,{ recipient:$('#fRecipient').value.trim()||'Pookie', headline:$('#fHeadline').value.trim()||DEFAULTS.headline, sub:$('#fSub').value.trim(),
   caption:$('#fCaption').value.trim(), question:$('#fQuestion').value.trim()||DEFAULTS.question, love:$('#fLove').value.trim(), acts:$('#fActs').value.trim()||DEFAULTS.acts }); }
 $('#setSave').onclick=async()=>{ readForm(); try { await saveCfg(); toast('Đã lưu thiệp 💗'); $('#setOverlay').hidden=true; } catch {} };
@@ -678,7 +802,12 @@ async function makeSupabase(){
     const i = path.indexOf('/'); const table = path.slice(0,i), id = path.slice(i+1);
     return {
       async set(data){ const { error } = await sb.from(table).upsert({ id, data }); if (error) throw error; },
-      async delete(){ const { error } = await sb.from(table).delete().eq('id', id); if (error) throw error; },
+      async delete(){
+        // RLS chặn xoá thì Supabase không báo lỗi mà chỉ xoá 0 dòng, nên phải tự kiểm tra.
+        const { data, error } = await sb.from(table).delete().eq('id', id).select('id');
+        if (error) throw error;
+        if (!data || !data.length) throw Object.assign(new Error('Không xoá được '+path), { code:'not_deleted' });
+      },
       onSnapshot(cb, onErr){
         const pull = async () => {
           const { data, error } = await sb.from(table).select('data').eq('id', id).maybeSingle();
@@ -718,11 +847,16 @@ applyTheme(store.get('pk.theme')||'rose', false);
   // 3) Mở file trực tiếp / chưa cấu hình: chế độ xem thử.
   else { S.mode='local'; S.canEdit=true; }
 
-  $('#setBtn').hidden=!S.canEdit; $('#themeDefault').hidden=!(S.canEdit && S.mode==='cloud');
+  $('#setBtn').hidden=!S.canEdit; $('#notiBtn').hidden=!S.canEdit; $('#themeDefault').hidden=!(S.canEdit && S.mode==='cloud');
   if (S.mode==='local'){ render(); return; }
   S.db.doc('config/main').onSnapshot(s=>{ if (s.exists){ S.cfg={...DEFAULTS,...s.data()}; if (!store.get('pk.theme') && S.cfg.theme) applyTheme(S.cfg.theme,false); else if (S.step===0||S.step===6) render(); if (!$('#setOverlay').hidden){ $('#mainPhotoState').textContent=S.cfg.photo?'Đã có ảnh ✓':'Chưa có ảnh'; $('#mePhotoState').textContent=S.cfg.photoMe?'Đã có ảnh ✓':'Chưa có ảnh'; } } },()=>{});
   S.db.collection('memories').orderBy('createdAt','asc').limit(200).onSnapshot(s=>{ S.memories=s.docs.map(d=>({id:d.id,...d.data()})).filter(m=>m.asset); if(!$('#setOverlay').hidden) renderThumbs(); if (S.step===6) render(); },()=>{});
-  if (S.canEdit) S.db.collection('responses').orderBy('at','desc').limit(50).onSnapshot(s=>{ S.responses=s.docs.map(d=>d.data()); if(!$('#setOverlay').hidden) renderResp(); },()=>{});
+  if (S.canEdit) S.db.collection('responses').orderBy('at','desc').limit(50).onSnapshot(s=>{
+    const before=new Set(S.responses.map(r=>r.id));
+    S.responses=s.docs.map(d=>({id:d.id,...d.data()}));
+    if (S.respLoaded && S.responses.some(r=>!before.has(r.id))) toast('💌 Em vừa gửi lịch hẹn mới!');
+    S.respLoaded=true; updateBadge(); if(!$('#notiOverlay').hidden) renderResp();
+  },()=>{});
   render();
 })();
 })();

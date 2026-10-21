@@ -47,5 +47,5 @@ Adapter Supabase nằm ở hàm `makeSupabase()` — nó chỉ giả lập đún
 Trong `<script>`, sửa các hằng sau:
 - `DEFAULTS`: tên người nhận, câu hỏi, lời nhắn, danh sách chỗ đi chơi.
 - `NO_TEXTS`: các câu nút "Không" đổi qua.
-- `TIMES`: các khung giờ hẹn.
+- `PERIODS`: các buổi (Sáng/Trưa/Chiều/Tối) ở bước chọn giờ, mỗi buổi có giờ bắt đầu `from` và kết thúc `to` (mốc cách 30 phút; nút −/+ chỉnh thêm từng 5 phút).
 - `THEMES`: các theme màu. Bảng màu của từng theme nằm trong CSS, ở `:root[data-theme-name="..."]`.
