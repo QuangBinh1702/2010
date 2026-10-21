@@ -43,7 +43,7 @@ button{cursor:pointer}
 .from span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .from svg{flex:none;color:var(--accent)}
 .sp{flex:1}
-.today{font-size:13px;color:var(--muted);white-space:nowrap}
+.top .today{font-size:13px;color:var(--muted);white-space:nowrap}
 .iconbtn{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;padding:0;flex:none}
 .themes{position:absolute;right:0;top:56px;background:var(--card);backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:18px;padding:10px;display:grid;gap:4px;box-shadow:var(--shadow);width:230px;z-index:30}
 .themes button{display:flex;align-items:center;gap:10px;border:0;background:none;padding:8px 10px;border-radius:12px;text-align:left;font-weight:600;font-size:14px}
@@ -190,11 +190,15 @@ textarea.note:focus{border-color:var(--accent)}
 
 @media (max-width:720px){
   .intro{grid-template-columns:1fr;text-align:center;justify-items:center}
-  .intro .polaroid{order:-1;width:min(250px,70vw);margin-top:30px}
+  .intro .polaroid{order:-1;width:min(250px,70vw,32vh);margin-top:30px}
   .when{grid-template-columns:1fr}
-  .today{display:none}
+  .top .today{display:none}
+  .top{margin-inline:-16px;padding-inline:16px;padding-block:10px;background:color-mix(in srgb,var(--bg1) 82%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 }
-@media (max-width:420px){ .acts{grid-template-columns:1fr} .card{padding:56px 18px 22px} }
+@media (max-width:420px){
+  .acts{grid-template-columns:1fr} .card{padding:56px 18px 22px}
+  .back{z-index:3;top:10px;right:10px;padding:4px 10px;border-radius:99px;background:var(--card);box-shadow:0 2px 8px #0001}
+}
 @media (prefers-reduced-motion:reduce){ *,*::before,*::after{animation:none!important;transition:none!important} }
 </style>
 
@@ -227,6 +231,12 @@ textarea.note:focus{border-color:var(--accent)}
       <h4>Ảnh polaroid</h4>
       <div class="uprow"><button class="btn ghost" id="mainPhotoBtn" type="button">Chọn ảnh</button><small id="mainPhotoState" style="color:var(--muted)"></small></div>
       <input type="file" id="mainPhotoIn" accept="image/png,image/jpeg,image/webp,image/gif" hidden>
+    </div>
+    <div class="sec">
+      <h4>Ảnh của anh</h4>
+      <small style="color:var(--muted)">Hiện ở ô "A" trên vé hẹn hò, cạnh ảnh của em.</small>
+      <div class="uprow" style="margin-top:10px"><button class="btn ghost" id="mePhotoBtn" type="button">Chọn ảnh</button><small id="mePhotoState" style="color:var(--muted)"></small></div>
+      <input type="file" id="mePhotoIn" accept="image/png,image/jpeg,image/webp,image/gif" hidden>
     </div>
     <div class="sec">
       <h4>Album kỷ niệm</h4>
@@ -268,7 +278,7 @@ const DEFAULTS = {
   caption:'Em 💗', question:'Em yêu anh không :3',
   love:'Chúc bé của anh có một ngày thật hạnh phúc nha.\nMình chọn ngày đi chơi nhé!',
   acts:'🍜 | Đi ăn | Món ngon, người thương\n🎬 | Xem phim | Chung một chiếc ghế đôi\n☕ | Cà phê | Ngồi kể chuyện cả buổi\n🌅 | Đi dạo | Ngắm hoàng hôn bờ sông\n🎡 | Khu vui chơi | Chơi tới khi mỏi chân',
-  photo:null, theme:null,
+  photo:null, photoMe:null, theme:null,
 };
 const NO_TEXTS = ['Không','Đừng mà…','Chắc chưa?','Nghĩ lại đi 🥺','Bấm nhầm đó','Không có nút này đâu','Mèo buồn rồi kìa','Thôi bấm Có đi mà'];
 const TIMES = ['08:00','10:00','14:00','16:00','17:30','18:30','19:00','20:00','21:00'];
@@ -506,8 +516,9 @@ function renderTicket(){
   const [scr,card]=cardShell({back:4});
   card.append(el('h2',null,'Hẹn hò của tụi mình 💗'), el('p','lead','Kiểm tra lại rồi gửi cho anh nha.'));
   const t=el('div','ticket'); const tt=el('div','tt'); const av=el('div','av');
-  const a1=el('span'); if (S.cfg.photo){ const i=new Image(); i.alt=''; i.src=imgSrc(S.cfg.photo); a1.append(i);} else a1.textContent='A';
-  const a2=el('span','', 'E'); av.append(a1,a2);
+  const a1=el('span'); if (S.cfg.photoMe){ const i=new Image(); i.alt=''; i.src=imgSrc(S.cfg.photoMe); a1.append(i);} else a1.textContent='A';
+  const a2=el('span'); if (S.cfg.photo){ const i=new Image(); i.alt=''; i.src=imgSrc(S.cfg.photo); a2.append(i);} else a2.textContent='E';
+  av.append(a1,a2);
   const who=el('div'); who.append(el('b',null,`Anh & Bé ${S.cfg.recipient||'Pookie'}`), el('div',null,'Vé hẹn hò · không hoàn, không đổi 😌')); who.lastChild.style.cssText='font-size:12px;color:var(--muted)';
   tt.append(av,who); const dl=el('dl');
   const acts=[...S.pick.acts]; if (S.pick.other.trim()) acts.push(S.pick.other.trim());
@@ -569,6 +580,7 @@ function fillEditor(){
   $('#fRecipient').value=S.cfg.recipient; $('#fHeadline').value=S.cfg.headline; $('#fSub').value=S.cfg.sub; $('#fCaption').value=S.cfg.caption;
   $('#fQuestion').value=S.cfg.question; $('#fLove').value=S.cfg.love; $('#fActs').value=S.cfg.acts;
   $('#mainPhotoState').textContent=S.cfg.photo?'Đã có ảnh. Chọn ảnh khác để thay.':'Chưa có ảnh';
+  $('#mePhotoState').textContent=S.cfg.photoMe?'Đã có ảnh. Chọn ảnh khác để thay.':'Chưa có ảnh';
   renderThumbs(); renderResp(); showMeter();
 }
 function renderThumbs(){
@@ -599,10 +611,14 @@ function readForm(){ Object.assign(S.cfg,{ recipient:$('#fRecipient').value.trim
   caption:$('#fCaption').value.trim(), question:$('#fQuestion').value.trim()||DEFAULTS.question, love:$('#fLove').value.trim(), acts:$('#fActs').value.trim()||DEFAULTS.acts }); }
 $('#setSave').onclick=async()=>{ readForm(); try { await saveCfg(); toast('Đã lưu thiệp 💗'); $('#setOverlay').hidden=true; } catch {} };
 $('#setPreview').onclick=async()=>{ readForm(); try { await saveCfg(); } catch {} $('#setOverlay').hidden=true; S.noCount=0; S.pick={acts:new Set(),other:'',date:null,time:null,note:''}; go(0); };
-$('#mainPhotoBtn').onclick=()=>$('#mainPhotoIn').click();
-$('#mainPhotoIn').onchange=async e=>{ const f=e.target.files[0]; e.target.value=''; if(!f) return; $('#mainPhotoState').textContent='Đang tải…';
-  try { const old=S.cfg.photo; S.cfg.photo=await uploadBlob(await prepare(f)); readForm(); await saveCfg(); if (old && S.mode==='cloud') try { await S.assets.delete(old); } catch {}
-    $('#mainPhotoState').textContent='Đã cập nhật ảnh ✓'; } catch(err){ $('#mainPhotoState').textContent=ERR[err?.code]||'Chưa tải được ảnh'; } };
+function photoField(key, prefix){
+  $('#'+prefix+'Btn').onclick=()=>$('#'+prefix+'In').click();
+  $('#'+prefix+'In').onchange=async e=>{ const f=e.target.files[0]; e.target.value=''; if(!f) return; const st=$('#'+prefix+'State'); st.textContent='Đang tải…';
+    try { const old=S.cfg[key]; S.cfg[key]=await uploadBlob(await prepare(f)); readForm(); await saveCfg(); if (old && S.mode==='cloud') try { await S.assets.delete(old); } catch {}
+      st.textContent='Đã cập nhật ảnh ✓'; } catch(err){ st.textContent=ERR[err?.code]||'Chưa tải được ảnh'; } };
+}
+photoField('photo','mainPhoto');
+photoField('photoMe','mePhoto');
 $('#albumBtn').onclick=()=>$('#albumIn').click();
 $('#albumIn').onchange=async e=>{ const files=[...e.target.files]; e.target.value=''; let ok=0;
   for (const f of files){ const ph=el('div'); const pv=new Image(); pv.src=URL.createObjectURL(f); ph.append(pv, el('span','st','Đang tải')); $('#albumThumbs').append(ph);
@@ -704,7 +720,7 @@ applyTheme(store.get('pk.theme')||'rose', false);
 
   $('#setBtn').hidden=!S.canEdit; $('#themeDefault').hidden=!(S.canEdit && S.mode==='cloud');
   if (S.mode==='local'){ render(); return; }
-  S.db.doc('config/main').onSnapshot(s=>{ if (s.exists){ S.cfg={...DEFAULTS,...s.data()}; if (!store.get('pk.theme') && S.cfg.theme) applyTheme(S.cfg.theme,false); else if (S.step===0||S.step===6) render(); if (!$('#setOverlay').hidden) $('#mainPhotoState').textContent=S.cfg.photo?'Đã có ảnh ✓':'Chưa có ảnh'; } },()=>{});
+  S.db.doc('config/main').onSnapshot(s=>{ if (s.exists){ S.cfg={...DEFAULTS,...s.data()}; if (!store.get('pk.theme') && S.cfg.theme) applyTheme(S.cfg.theme,false); else if (S.step===0||S.step===6) render(); if (!$('#setOverlay').hidden){ $('#mainPhotoState').textContent=S.cfg.photo?'Đã có ảnh ✓':'Chưa có ảnh'; $('#mePhotoState').textContent=S.cfg.photoMe?'Đã có ảnh ✓':'Chưa có ảnh'; } } },()=>{});
   S.db.collection('memories').orderBy('createdAt','asc').limit(200).onSnapshot(s=>{ S.memories=s.docs.map(d=>({id:d.id,...d.data()})).filter(m=>m.asset); if(!$('#setOverlay').hidden) renderThumbs(); if (S.step===6) render(); },()=>{});
   if (S.canEdit) S.db.collection('responses').orderBy('at','desc').limit(50).onSnapshot(s=>{ S.responses=s.docs.map(d=>d.data()); if(!$('#setOverlay').hidden) renderResp(); },()=>{});
   render();

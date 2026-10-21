@@ -1,4 +1,4 @@
-# Gửi Pé Pookie
+# Gửi Em iu
 
 Thiệp hỏi "Em yêu anh không :3", gồm một file `index.html` duy nhất. Không cần build, mở trực tiếp bằng trình duyệt là chạy.
 
