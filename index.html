@@ -22,6 +22,7 @@
 :root[data-theme-name="night"]{ --bg1:#0e1230; --bg2:#22134a; --ink:#f8eefc; --muted:#b9add8; --accent:#ff5f93; --accent-ink:#1a0d2b; --card:#1a1d44e6; --line:#3a3570; --soft:#262a5c; --petal:#ffd3e3; --f1:#ff5f93; --f2:#ffd36b; --f3:#ffe3ee; --leaf:#78c99b; --shadow:0 30px 70px -30px #000a,0 1px 0 #ffffff14 inset; color-scheme:dark }
 
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html,body{min-height:100%}
 body{margin:0;font-family:var(--body);color:var(--ink);font-size:15px;line-height:1.55;
   background:radial-gradient(120% 80% at 10% 0%,var(--bg1),transparent 60%),radial-gradient(100% 90% at 100% 100%,var(--bg2),transparent 65%),var(--bg1);
@@ -122,6 +123,11 @@ h2{font-size:clamp(26px,5.5vw,34px)}
 .times h4,.cal-wrap h4{grid-column:1/-1;margin:0 0 4px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .times button{border:1.5px solid var(--line);background:var(--card);border-radius:12px;padding:9px 0;font-weight:600;font-variant-numeric:tabular-nums}
 .times button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.times .custom{grid-column:1/-1;display:flex;align-items:center;gap:10px;border:1.5px dashed var(--line);background:var(--card);border-radius:12px;padding:6px 6px 6px 14px;font-weight:600;font-size:14px;color:var(--muted);cursor:pointer}
+.times .custom input{flex:1;min-width:0;border:0;background:transparent;font:inherit;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;padding:4px 6px;outline:none;color-scheme:light dark}
+.times .custom.on{border-style:solid;border-color:var(--accent);background:var(--accent)}
+.times .custom.on span,.times .custom.on input{color:var(--accent-ink)}
+.times .custom.on input::-webkit-calendar-picker-indicator{filter:invert(1)}
 
 /* ticket */
 .ticket{margin-top:22px;text-align:left;border-radius:20px;background:var(--soft);position:relative;overflow:hidden}
@@ -196,7 +202,7 @@ textarea.note:focus{border-color:var(--accent)}
 <div id="cats" aria-hidden="true"></div>
 
 <header class="top">
-  <div class="from"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20s-7-4.4-9.2-9A5 5 0 0 1 12 6a5 5 0 0 1 9.2 5c-2.2 4.6-9.2 9-9.2 9z"/></svg><span id="fromText">Gửi pé Pookie của anh 💗</span></div>
+  <div class="from"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20s-7-4.4-9.2-9A5 5 0 0 1 12 6a5 5 0 0 1 9.2 5c-2.2 4.6-9.2 9-9.2 9z"/></svg><span id="fromText">Gửi em iu của anh 💗</span></div>
   <div class="sp"></div>
   <span class="today" id="todayText"></span>
   <button class="iconbtn" id="themeBtn" aria-label="Đổi giao diện" aria-expanded="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r="1.5"/><circle cx="17.5" cy="10.5" r="1.5"/><circle cx="8.5" cy="7.5" r="1.5"/><circle cx="6.5" cy="12.5" r="1.5"/><path d="M12 2a10 10 0 0 0 0 20c1.1 0 2-.9 2-2 0-.5-.2-1-.5-1.3-.3-.4-.5-.8-.5-1.3 0-1.1.9-2 2-2h2.4A5.6 5.6 0 0 0 22 9.8C22 5.5 17.5 2 12 2z"/></svg></button>
@@ -210,7 +216,7 @@ textarea.note:focus{border-color:var(--accent)}
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="setTitle">
     <h3 id="setTitle">Soạn thiệp</h3>
     <p class="sub">Chỉ bạn thấy phần này. Người nhận mở link sẽ đi qua từng bước của thiệp.</p>
-    <div class="field"><label for="fRecipient">Gọi người ấy là</label><input id="fRecipient" maxlength="40"><small>Hiện ở thanh trên: "Gửi pé ___ của anh 💗"</small></div>
+    <div class="field"><label for="fRecipient">Gọi người ấy là</label><input id="fRecipient" maxlength="40"><small>Hiện ở thanh trên: "Gửi bé ___ của anh 💗"</small></div>
     <div class="field"><label for="fHeadline">Câu mở đầu</label><input id="fHeadline" maxlength="80"><small>Bọc chữ trong *dấu sao* để tô màu, ví dụ: em là *đóa hoa* xinh nhất.</small></div>
     <div class="field"><label for="fSub">Dòng viết tay bên dưới</label><input id="fSub" maxlength="80"></div>
     <div class="field"><label for="fCaption">Chữ dưới ảnh polaroid</label><input id="fCaption" maxlength="30"></div>
@@ -258,9 +264,9 @@ const THEMES = [
   { id:'night', name:'Đêm sao', c:['#0e1230','#ff5f93'] },
 ];
 const DEFAULTS = {
-  recipient:'Pookie', headline:'Hôm nay, em là *đóa hoa* xinh nhất.', sub:'Có một điều nhỏ anh muốn hỏi em…',
-  caption:'anh 💗', question:'Em yêu anh không :3',
-  love:'Chúc pé của anh có một ngày thật hạnh phúc nha.\nMình chọn ngày đi chơi nhé!',
+  recipient:'Em iu', headline:'Hôm nay, em là *đóa hoa* xinh nhất.', sub:'Có một điều nhỏ anh muốn hỏi em…',
+  caption:'Em 💗', question:'Em yêu anh không :3',
+  love:'Chúc bé của anh có một ngày thật hạnh phúc nha.\nMình chọn ngày đi chơi nhé!',
   acts:'🍜 | Đi ăn | Món ngon, người thương\n🎬 | Xem phim | Chung một chiếc ghế đôi\n☕ | Cà phê | Ngồi kể chuyện cả buổi\n🌅 | Đi dạo | Ngắm hoàng hôn bờ sông\n🎡 | Khu vui chơi | Chơi tới khi mỏi chân',
   photo:null, theme:null,
 };
@@ -278,7 +284,7 @@ const S = { cfg:{...DEFAULTS}, memories:[], responses:[], step:0, noCount:0,
    - Mở link ...?edit=<editKey> → mở chế độ chỉnh sửa (dành cho bạn)
    Để trống url/anonKey thì trang chạy ở chế độ xem thử như cũ.        */
 const SUPABASE = {
-  url:     'https://dmyaxlqwdhvjtasttfqe.supabase.co/rest/v1/',                 // ví dụ: https://abcxyz.supabase.co
+  url:     'https://dmyaxlqwdhvjtasttfqe.supabase.co',                 // ví dụ: https://abcxyz.supabase.co
   anonKey: 'sb_publishable_rdMFvuUsvehF9VCVmzg6cg_RODYiSrk',                 // Project API Key (anon / public)
   editKey: 'doi-mk', // mật khẩu mở chế độ sửa: mở ...?edit=doi-mat-khau-nay
 };
@@ -309,14 +315,14 @@ function garlandSVG(){
   [[30,40,-30],[78,58,-10],[125,68,5],[175,68,-5],[222,58,10],[268,40,30]].forEach(([x,y,r],i)=> s+=leaf(x,y,r+(i%2?160:0),22,lf));
   pts.forEach(([x,y],i)=>{ const big = i===1||i===3||i===5; s += (i%2===0 ? blossom(x,y,big?16:12,i===3?f3:f2,f1) : rose(x,y,big?14:11,f1,'#00000033')); });
   s+=rose(56,50,17,f1,'#00000038')+blossom(92,62,15,f2,f1);
-  return s+'</svg>';
+  return s+'<\/svg>';
 }
 function crownSVG(){
   const css = getComputedStyle(document.documentElement), v = n => css.getPropertyValue(n).trim();
   let s=`<svg class="crown" viewBox="0 0 240 70" xmlns="http://www.w3.org/2000/svg">`;
   for (let i=0;i<9;i++) s+=leaf(10+i*27, 40+Math.sin(i)*6, i*40, 20, v('--leaf'));
   [[24,40,14],[56,30,17],[92,26,16],[128,24,18],[164,26,16],[200,30,17],[228,42,13]].forEach(([x,y,r],i)=> s += i%2 ? blossom(x,y,r,v('--f2'),v('--f1')) : rose(x,y,r,v('--f1'),'#00000033'));
-  return s+'</svg>';
+  return s+'<\/svg>';
 }
 const CAT_FUR = ['#f2b880','#d9d4cf','#3b3533','#f7f1e8','#c98b5a','#9aa0a8'];
 function catSVG(mood){
@@ -325,9 +331,9 @@ function catSVG(mood){
     : mood===1 ? `<circle cx="35" cy="46" r="6" fill="${ink}"/><circle cx="65" cy="46" r="6" fill="${ink}"/><circle cx="37" cy="44" r="2" fill="#fff"/><circle cx="67" cy="44" r="2" fill="#fff"/><path d="M28 36l12 4M72 36l-12 4" stroke="${ink}" stroke-width="2.5" stroke-linecap="round"/>`
     : `<ellipse cx="35" cy="47" rx="7" ry="8" fill="${ink}"/><ellipse cx="65" cy="47" rx="7" ry="8" fill="${ink}"/><circle cx="37" cy="44" r="2.6" fill="#fff"/><circle cx="67" cy="44" r="2.6" fill="#fff"/>`;
   const mouth = mood===1 ? `<path d="M44 64q6-4 12 0" stroke="${ink}" stroke-width="2.5" fill="none" stroke-linecap="round"/>` : `<path d="M44 62q3 4 6 0q3 4 6 0" stroke="${ink}" stroke-width="2.5" fill="none" stroke-linecap="round"/>`;
-  return `<svg class="cat" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M16 40L20 8l24 18M84 40L80 8 56 26" fill="${fur}"/><path d="M22 16l3 16 10-6M78 16l-3 16-10-6" fill="#f6a5b5"/><ellipse cx="50" cy="54" rx="38" ry="33" fill="${fur}"/>${eyes}<path d="M47 56h6l-3 3z" fill="#f08aa4"/>${mouth}<path d="M14 56h16M14 62h16M86 56H70M86 62H70" stroke="${ink}" stroke-width="1.6" opacity=".5"/><ellipse cx="26" cy="60" rx="6" ry="4" fill="#f6a5b5" opacity=".6"/><ellipse cx="74" cy="60" rx="6" ry="4" fill="#f6a5b5" opacity=".6"/></svg>`;
+  return `<svg class="cat" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M16 40L20 8l24 18M84 40L80 8 56 26" fill="${fur}"/><path d="M22 16l3 16 10-6M78 16l-3 16-10-6" fill="#f6a5b5"/><ellipse cx="50" cy="54" rx="38" ry="33" fill="${fur}"/>${eyes}<path d="M47 56h6l-3 3z" fill="#f08aa4"/>${mouth}<path d="M14 56h16M14 62h16M86 56H70M86 62H70" stroke="${ink}" stroke-width="1.6" opacity=".5"/><ellipse cx="26" cy="60" rx="6" ry="4" fill="#f6a5b5" opacity=".6"/><ellipse cx="74" cy="60" rx="6" ry="4" fill="#f6a5b5" opacity=".6"/><\/svg>`;
 }
-const HEART = '<svg class="hearticon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20s-7-4.4-9.2-9A5 5 0 0 1 12 6a5 5 0 0 1 9.2 5c-2.2 4.6-9.2 9-9.2 9z"/></svg>';
+const HEART = '<svg class="hearticon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20s-7-4.4-9.2-9A5 5 0 0 1 12 6a5 5 0 0 1 9.2 5c-2.2 4.6-9.2 9-9.2 9z"/><\/svg>';
 
 /* ---------- petals ---------- */
 const petals = (() => {
@@ -394,7 +400,7 @@ function cardShell(opts={}){
 
 function render(){
   const stage=$('#stage'); stage.replaceChildren();
-  $('#fromText').textContent=`Gửi pé ${S.cfg.recipient||'Pookie'} của anh 💗`;
+  $('#fromText').textContent=`Gửi ${S.cfg.recipient} của anh 💗`;
   const noFlee=$('#noBtn'); if (noFlee) noFlee.remove();
   if (S.step!==1) $('#cats').replaceChildren();
   [renderIntro,renderAsk,renderYes,renderWhere,renderWhen,renderTicket,renderDone][S.step]();
@@ -406,13 +412,13 @@ function renderIntro(){
   left.append(el('span','date',`Hôm nay ${pad(now.getDate())}/${pad(now.getMonth()+1)}`));
   const h=el('h1'); headlineNodes(h,S.cfg.headline||DEFAULTS.headline); left.append(h);
   left.append(el('p','sub',S.cfg.sub));
-  const b=el('button','btn','Mở thiệp nè'); b.insertAdjacentHTML('beforeend','<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>');
+  const b=el('button','btn','Mở thiệp nè'); b.insertAdjacentHTML('beforeend','<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m-6-6 6 6-6 6"/><\/svg>');
   b.onclick=()=>go(1); left.append(b, stepDots(0));
   const pol=el('div','polaroid'); pol.append(el('span','tape')); pol.insertAdjacentHTML('beforeend',crownSVG());
   const ph=el('div','ph');
   if (S.cfg.photo){ const img=new Image(); img.alt='Ảnh của anh'; img.src=imgSrc(S.cfg.photo); ph.append(img); }
-  else { const e=el('div','empty'); e.insertAdjacentHTML('beforeend','<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 20s-7-4.4-9.2-9A5 5 0 0 1 12 6a5 5 0 0 1 9.2 5c-2.2 4.6-9.2 9-9.2 9z"/></svg>');
-    e.append(el('span',null, S.canEdit ? 'Bấm bút chì góc trên để thêm ảnh của bạn' : 'Ảnh của anh ở đây')); ph.append(e); }
+  else { const e=el('div','empty'); e.insertAdjacentHTML('beforeend','<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 20s-7-4.4-9.2-9A5 5 0 0 1 12 6a5 5 0 0 1 9.2 5c-2.2 4.6-9.2 9-9.2 9z"/><\/svg>');
+    e.append(el('span',null, S.canEdit ? 'Bấm bút chì góc trên để thêm ảnh của bạn' : 'Ảnh của em ở đây')); ph.append(e); }
   pol.append(ph, el('div','pcap',S.cfg.caption||''));
   wrap.append(left,pol); scr.append(wrap); $('#stage').append(scr);
 }
@@ -485,6 +491,11 @@ function renderWhen(){
   cw.append(el('h4',null,'Ngày'), head, cal);
   const times=el('div','times'); times.append(el('h4',null,'Giờ'));
   TIMES.forEach(t=>{ const b=el('button',null,t); b.type='button'; b.setAttribute('aria-pressed',String(S.pick.time===t)); b.onclick=()=>{ S.pick.time=t; render(); }; times.append(b); });
+  const own=!!S.pick.time && !TIMES.includes(S.pick.time);
+  const cl=el('label','custom'); cl.classList.toggle('on',own); cl.append(el('span',null,'Giờ khác'));
+  const ti=el('input'); ti.type='time'; ti.step=300; ti.value=own?S.pick.time:''; ti.setAttribute('aria-label','Chọn giờ khác');
+  ti.onchange=()=>{ if (ti.value){ S.pick.time=ti.value; render(); } };
+  cl.append(ti); times.append(cl);
   wrap.append(cw,times);
   const foot=el('div','foot'); const info=el('small', null, S.pick.date ? `${longDate(S.pick.date)}${S.pick.time?' · '+S.pick.time:''}` : 'Chưa chọn ngày');
   const next=el('button','btn','Xem vé hẹn →'); next.disabled=!(S.pick.date&&S.pick.time); next.onclick=()=>go(5);
@@ -497,7 +508,7 @@ function renderTicket(){
   const t=el('div','ticket'); const tt=el('div','tt'); const av=el('div','av');
   const a1=el('span'); if (S.cfg.photo){ const i=new Image(); i.alt=''; i.src=imgSrc(S.cfg.photo); a1.append(i);} else a1.textContent='A';
   const a2=el('span','', 'E'); av.append(a1,a2);
-  const who=el('div'); who.append(el('b',null,`Anh & pé ${S.cfg.recipient||'Pookie'}`), el('div',null,'Vé hẹn hò · không hoàn, không đổi 😌')); who.lastChild.style.cssText='font-size:12px;color:var(--muted)';
+  const who=el('div'); who.append(el('b',null,`Anh & Bé ${S.cfg.recipient||'Pookie'}`), el('div',null,'Vé hẹn hò · không hoàn, không đổi 😌')); who.lastChild.style.cssText='font-size:12px;color:var(--muted)';
   tt.append(av,who); const dl=el('dl');
   const acts=[...S.pick.acts]; if (S.pick.other.trim()) acts.push(S.pick.other.trim());
   [['Ngày',S.pick.date?longDate(S.pick.date):'—'],['Giờ',S.pick.time||'—'],['Đi đâu',acts.join(', ')||'—']].forEach(([k,v])=>dl.append(el('dt',null,k),el('dd',null,v)));
@@ -700,3 +711,5 @@ applyTheme(store.get('pk.theme')||'rose', false);
 })();
 })();
 </script>
+</body>
+</html>
